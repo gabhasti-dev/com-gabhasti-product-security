@@ -7,4 +7,5 @@ import com.gabhasti.product.beans.ApplicationUser;
 public interface ApplicationUserRepository extends JpaRepository<ApplicationUser, String> {
 
 	ApplicationUser findByUsername(String username);
+	
 }

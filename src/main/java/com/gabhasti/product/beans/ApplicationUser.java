@@ -12,6 +12,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 @Table(name = "USER_TABLE")
 public class ApplicationUser implements Serializable{
@@ -25,7 +28,7 @@ public class ApplicationUser implements Serializable{
 
 	@Id	
 	private String username;
-	
+
 	private String password;
 	
 	private String email;
@@ -59,11 +62,11 @@ public class ApplicationUser implements Serializable{
 	public void setUsername(String username) {
 		this.username = username;
 	}
-
+	@JsonIgnore
 	public String getPassword() {
 		return password;
 	}
-
+	@JsonProperty
 	public void setPassword(String password) {
 		this.password = password;
 	}

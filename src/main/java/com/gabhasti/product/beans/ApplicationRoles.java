@@ -6,11 +6,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.springframework.security.core.GrantedAuthority;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
-@Table(name = "USER_ROLES")
+@Table(name = "USER_ROLES",uniqueConstraints = @UniqueConstraint(columnNames = {"authority","username"}))
 public class ApplicationRoles implements GrantedAuthority {
 
 	private static final long serialVersionUID = 1L;
@@ -28,6 +31,7 @@ public class ApplicationRoles implements GrantedAuthority {
 	public String getAuthority() {
 		return authority;
 	}
+	@JsonIgnore
 	public int getId() {
 		return id;
 	}

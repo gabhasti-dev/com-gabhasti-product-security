@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gabhasti.product.beans.ApplicationRoles;
 import com.gabhasti.product.beans.ApplicationUser;
 import com.gabhasti.product.repository.ApplicationUserRepository;
 
@@ -33,6 +35,7 @@ public class UserController {
 		
 	}
 	
+	//@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("/user/sign-up")
 	public void signUp(@RequestBody ApplicationUser user) {
 		log.debug("User Registeration ::"+user.getUsername());
@@ -41,18 +44,31 @@ public class UserController {
 		log.debug("User Registeration complete::"+user.getUsername());
 		
 	}
-	@GetMapping("/user/{username}")
-	public ResponseEntity<List> getAllUsers(@PathVariable("username") String username ){
-		log.debug("Getting all "+applicationUserRepository.findByUsername(username));
+	@GetMapping("/user/roles")
+	public ResponseEntity<List<ApplicationRoles>> getAllUsersRoles(Principal principal){
+		ApplicationUser user =applicationUserRepository.findByUsername(principal.getName());
 		
-		return new ResponseEntity(applicationUserRepository.findByUsername(username),HttpStatus.OK);
+		return new ResponseEntity(user.getRoles(),HttpStatus.OK);
 		
 	}
 	
-	@GetMapping("/user/principal")
-	public ResponseEntity<String> getPrincipal(Principal principal){
+	@GetMapping("/user")
+	public ResponseEntity<List<ApplicationUser>> getAllUsers(Principal principal){
+		ApplicationUser user =applicationUserRepository.findByUsername(principal.getName());
+		//user.setPassword(null);
+		return new ResponseEntity(user,HttpStatus.OK);
 		
-		return new ResponseEntity(principal.getName(),HttpStatus.OK);
+	}
+	
+
+	
+	
+	
+	
+	@GetMapping("/user/principal")
+	public ResponseEntity<Principal> getPrincipal(Principal principal){
+		
+		return new ResponseEntity(principal,HttpStatus.OK);
 		
 	}
 }
